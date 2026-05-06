@@ -1,18 +1,14 @@
 package com.example.demo.controllers;
 
 import com.example.demo.dto.user.CreateUserRequest;
-import com.example.demo.dto.user.CreateUserResponse;
+import com.example.demo.dto.user.UserResponse;
 import com.example.demo.dto.user.LoginRequest;
 import com.example.demo.dto.user.LoginResponse;
-import com.example.demo.models.User;
 import com.example.demo.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -25,7 +21,7 @@ public class AuthController {
     @PostMapping(value = "/register")
     public ResponseEntity<?>create(@RequestBody CreateUserRequest request){
         try{
-            CreateUserResponse user = userService.create(request);
+            LoginResponse user = userService.create(request);
             return ResponseEntity.status(HttpStatus.CREATED).body(user);
         }catch (RuntimeException e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of(
@@ -47,4 +43,5 @@ public class AuthController {
             ));
         }
     }
+
 }
