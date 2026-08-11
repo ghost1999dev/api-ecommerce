@@ -93,20 +93,17 @@ public class UserService {
         userResponse.setPhone(user.getPhone());
         userResponse.setEmail(user.getEmail());
         userResponse.setRoles(roleDTOS);
-
         LoginResponse loginResponse = new LoginResponse();
         loginResponse.setToken("Bearer " + token);
         loginResponse.setUserResponse(userResponse);
-
         return loginResponse;
-
     }
 
     //Find user by id
     @Transactional
     public UserResponse findById(Long id){
         User user = userRepository.findById(id)
-                .orElseThrow(()-> new RuntimeException("El email o Password no son validos"));
+                .orElseThrow(()-> new RuntimeException("El email no existe para este usuario"));
         List<Role> roles = roleRepository.findAllByUserHasRoles_User_Id(user.getId());
         List<RoleDTO> roleDTOS= roles.stream().map(
                 role-> new RoleDTO(role.getId(),role.getName(),role.getImage(),role.getRoute())
