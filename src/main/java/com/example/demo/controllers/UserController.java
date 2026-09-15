@@ -47,4 +47,16 @@ public class UserController {
             ));
         }
     }
+    @GetMapping(value="/findAll")
+    public ResponseEntity<?> findAll(){
+        try {
+            return ResponseEntity.ok(userService.findAll());
+        } catch (Exception e) {
+            // TODO: handle exception
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
+                "Message",e.getMessage(),
+                "statusCode", HttpStatus.INTERNAL_SERVER_ERROR.value()
+            ));
+        }
+    }
 }

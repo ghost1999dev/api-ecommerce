@@ -149,4 +149,13 @@ public class UserService {
         return userMapper.toUserResponse(user,roles);
 
     }
+
+    @Transactional 
+    public List<UserResponse>findAll(){
+        List<User> users = userRepository.findAll();
+        return users.stream().map(user->{
+            List<Role> roles = roleRepository.findAllByUserHasRoles_User_Id(user.getId());
+            return userMapper.toUserResponse(user, roles);
+        }).toList();
+    }
 }
