@@ -8,11 +8,13 @@ import com.example.demo.services.CategoryService;
 
 import lombok.RequiredArgsConstructor;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,6 +37,20 @@ public class CategoryController {
                     "statusCode", HttpStatus.BAD_REQUEST.value()
             ));
         } catch(Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
+                    "message", e.getMessage(),
+                    "statusCode", HttpStatus.INTERNAL_SERVER_ERROR.value()
+            ));
+        }
+    }
+
+    @GetMapping 
+    public ResponseEntity<?> getAllCategories(){
+        try {
+            List<CategoryResponse> categories = categoryService.getTop5Categories();
+            return ResponseEntity.ok(categories);
+        } catch (Exception e) {
+            // TODO: handle exception
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
                     "message", e.getMessage(),
                     "statusCode", HttpStatus.INTERNAL_SERVER_ERROR.value()

@@ -2,6 +2,9 @@ package com.example.demo.services;
 
 
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.stereotype.Service;
 
 import com.example.demo.dto.category.CategoryResponse;
@@ -32,6 +35,13 @@ public class CategoryService {
         Category savedCategory = categoryRepository.save(category);
         return categoryMapper.toResponse(savedCategory);
 
+    }
+
+    public List<CategoryResponse>getTop5Categories(){
+        return categoryRepository.findTop5ByOrderByIdAsc()
+            .stream()
+            .map(categoryMapper::toResponse)
+            .collect(Collectors.toList());
     }
     
 }
