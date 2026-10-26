@@ -16,31 +16,31 @@ import java.util.Date;
 @Component
 public class JwtUtil {
     private final SecretKey key = Keys.hmacShaKeyFor(
-            "hiT0VmdgqvztJVlbp6qblwAVHJzaC3GxBO3HTz1iZV1".getBytes(StandardCharsets.UTF_8)
-    );
+            "hiT0VmdgqvztJVlbp6qblwAVHJzaC3GxBO3HTz1iZV1".getBytes(StandardCharsets.UTF_8));
 
-
-    private Claims getClaims(String token){
+    private Claims getClaims(String token) {
         return Jwts.parser()
                 .verifyWith(key)
                 .build()
                 .parseSignedClaims(token)
                 .getPayload();
     }
-    public String extractUsername(String token){
+
+    public String extractUsername(String token) {
         return getClaims(token).getSubject();
     }
-    public boolean isTokenExpired(String token){
+
+    public boolean isTokenExpired(String token) {
         return getClaims(token).getExpiration().before(new Date());
     }
-    public boolean isTokenValid(String token, UserDetails userDetails){
+
+    public boolean isTokenValid(String token, UserDetails userDetails) {
         String username = extractUsername(token);
         return username.equals(userDetails.getUsername()) && !isTokenExpired(token);
     }
 
-
-    public String generateToken(User user){
-        long expirationMillis = 1000 *60 *60 * 24;
+    public String generateToken(User user) {
+        long expirationMillis = 1000 * 60 * 60 * 24;
         Date now = new Date();
         Date expiry = new Date(now.getTime() + expirationMillis);
 
@@ -51,6 +51,15 @@ public class JwtUtil {
                 .signWith(key)
                 .compact();
 
+    }
 
+    public boolean validateTokenSafely(String token) {
+        try {
+            getClaims(token);
+            return true;
+
+        } catch (Exception e) {
+            return false;
+        }
     }
 }
