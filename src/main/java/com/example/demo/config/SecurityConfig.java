@@ -26,6 +26,9 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/auth/**",
                                 "/uploads/**",
+                                "/ai/**",
+                                "/products/**",
+                                "/categories/**",
                                 "/error"
                         ).permitAll()
                         .anyRequest().authenticated()
